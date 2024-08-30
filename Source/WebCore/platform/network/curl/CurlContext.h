@@ -249,6 +249,9 @@ public:
     void enableHttpPutRequest();
     void setInFileSizeLarge(curl_off_t);
     void setHttpCustomRequest(const String&);
+#if PLATFORM(MUI)
+    void setResumeOffset(long long);
+#endif
 
     void enableConnectionOnly();
 

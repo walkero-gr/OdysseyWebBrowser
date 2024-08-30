@@ -234,6 +234,11 @@ CURL* CurlRequest::setupTransfer()
 
     m_curlHandle->setTimeout(timeoutInterval());
 
+#if PLATFORM(MUI)
+    if (m_downloadResumeOffset > 0)
+        m_curlHandle->setResumeOffset(m_downloadResumeOffset);
+#endif
+
     if (m_shouldSuspend)
         setRequestPaused(true);
 

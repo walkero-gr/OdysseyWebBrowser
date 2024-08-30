@@ -41,6 +41,11 @@
 #include "CurlRequest.h"
 #include <wtf/MessageQueue.h>
 #include <wtf/MonotonicTime.h>
+enum { STATUS_CONNECTING, STATUS_WAITING_DATA, STATUS_RECEIVING_DATA, STATUS_SENDING_DATA };
+#endif
+
+#if USE(CURL_OPENSSL)
+#include <openssl/ssl.h>
 #endif
 
 #if PLATFORM(COCOA)
@@ -72,6 +77,20 @@ public:
         , m_shouldContentEncodingSniff(shouldContentEncodingSniff)
 #if USE(CFURLCONNECTION)
         , m_currentRequest(request)
+#endif
+#if USE(CURL)
+        , m_shouldIncludeExpectHeader(true)
+        , m_canResume(false)
+        , m_startOffset(0)
+        , m_received(0)
+        , m_totalSize(0)
+        , m_state(0)
+        , m_disableEncoding(false)
+        , m_bodySize(0)
+        , m_bodyDataSent(0)
+#endif
+#if USE(CURL_OPENSSL)
+        , m_sslContext(0)
 #endif
         , m_failureTimer(*loader, &ResourceHandle::failureTimerFired)
     {
@@ -120,6 +139,19 @@ public:
 #if USE(CURL)
     std::unique_ptr<CurlResourceHandleDelegate> m_delegate;
     
+    ResourceResponse m_response;
+
+    bool m_shouldIncludeExpectHeader;
+    bool m_canResume;
+    unsigned long long m_startOffset;
+    String m_path;
+    long long m_received;
+    long long m_totalSize;
+    unsigned long m_state;
+    bool m_disableEncoding;
+    unsigned long m_bodySize;
+    unsigned long m_bodyDataSent;
+
     bool m_cancelled { false };
     unsigned m_redirectCount { 0 };
     unsigned m_authFailureCount { 0 };
@@ -127,6 +159,10 @@ public:
     RefPtr<CurlRequest> m_curlRequest;
     MessageQueue<WTF::Function<void()>>* m_messageQueue { };
     MonotonicTime m_startTime;
+#endif
+
+#if USE(CURL_OPENSSL)
+    SSL_CTX* m_sslContext;
 #endif
 
 #if PLATFORM(COCOA)

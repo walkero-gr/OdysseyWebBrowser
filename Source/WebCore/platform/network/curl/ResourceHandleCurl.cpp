@@ -50,6 +50,15 @@
 #include <wtf/FileSystem.h>
 #include <wtf/text/Base64.h>
 
+#if PLATFORM(MUI)
+#include "gui.h"
+#include <clib/debug_protos.h>
+#define D(x)
+#undef String
+#undef set
+#undef get
+#endif
+
 namespace WebCore {
 
 ResourceHandleInternal::~ResourceHandleInternal()
@@ -82,6 +91,16 @@ bool ResourceHandle::start()
     }
 
     d->m_startTime = MonotonicTime::now();
+
+#if PLATFORM(MUI)
+    if ((!d->m_user.isEmpty() || !d->m_pass.isEmpty()) && !shouldUseCredentialStorage()) {
+        // Credentials for ftp can only be passed in URL, the didReceiveAuthenticationChallenge delegate call won't be made.
+        URL urlWithCredentials(d->m_firstRequest.url());
+        urlWithCredentials.setUser(d->m_user);
+        urlWithCredentials.setPass(d->m_pass);
+        d->m_firstRequest.setURL(urlWithCredentials);
+    }
+#endif
 
     d->m_curlRequest = createCurlRequest(WTFMove(request));
 
@@ -214,6 +233,38 @@ void ResourceHandle::platformSetDefersLoading(bool defers)
         d->m_curlRequest->resume();
 }
 
+#if PLATFORM(MUI)
+void ResourceHandle::setStartOffset(unsigned long long offset)
+{
+    ResourceHandleInternal* d = getInternal();
+    d->m_startOffset = offset;
+}
+
+unsigned long long ResourceHandle::startOffset()
+{
+    ResourceHandleInternal* d = getInternal();
+    return d->m_startOffset;
+}
+
+void ResourceHandle::setCanResume(bool value)
+{
+    ResourceHandleInternal* d = getInternal();
+    d->m_canResume = value;
+}
+
+bool ResourceHandle::canResume()
+{
+    ResourceHandleInternal* d = getInternal();
+    return d->m_canResume;
+}
+
+bool ResourceHandle::isResuming()
+{
+    ResourceHandleInternal* d = getInternal();
+    return d->m_startOffset != 0;
+}
+#endif
+
 bool ResourceHandle::shouldUseCredentialStorage()
 {
     return (!client() || client()->shouldUseCredentialStorage(this)) && firstRequest().url().protocolIsInHTTPFamily();
@@ -242,7 +293,7 @@ void ResourceHandle::didReceiveAuthenticationChallenge(const AuthenticationChall
     }
 
     if (shouldUseCredentialStorage()) {
-        if (!d->m_initialCredential.isEmpty() || challenge.previousFailureCount()) {
+        if (/*!d->m_initialCredential.isEmpty() ||*/ challenge.previousFailureCount()) { // MORPHOS: the original check is weird 
             // The stored credential wasn't accepted, stop using it.
             // There is a race condition here, since a different credential might have already been stored by another ResourceHandle,
             // but the observable effect should be very minor, if any.
@@ -290,6 +341,12 @@ void ResourceHandle::receivedCredential(const AuthenticationChallenge& challenge
         if (challenge.failureResponse().httpStatusCode() == 401) {
             URL urlToStore = challenge.failureResponse().url();
             d->m_context->storageSession()->credentialStorage().set(partition, credential, challenge.protectionSpace(), urlToStore);
+#if PLATFORM(MUI)
+            String host = challenge.protectionSpace().host();
+            String realm = challenge.protectionSpace().realm();
+            //kprintf("Storing credentials in db for host %s realm %s (%s %s)\n", host.utf8().data(), realm.utf8().data(), credential.user().utf8().data(), credential.password().utf8().data());
+            methodstack_push_sync(app, 4, MM_OWBApp_SetCredential, &host, &realm, &credential);
+#endif
         }
     }
 
