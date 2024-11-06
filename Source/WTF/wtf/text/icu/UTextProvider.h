@@ -27,6 +27,10 @@
 
 #include <unicode/utext.h>
 
+#if OS(AMIGAOS)
+#include <exec/types.h>
+#endif
+
 namespace WTF {
 
 enum class UTextProviderContext {

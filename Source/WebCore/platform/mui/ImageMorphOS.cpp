@@ -29,7 +29,9 @@
 #include "SharedBuffer.h"
 #include <wtf/text/WTFString.h>
 #include <wtf/text/CString.h>
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 
 namespace WebCore {
 

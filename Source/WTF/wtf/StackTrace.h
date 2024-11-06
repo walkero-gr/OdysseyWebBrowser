@@ -29,6 +29,11 @@
 #include <wtf/Optional.h>
 #include <wtf/SystemFree.h>
 
+
+#if OS(AMIGAOS)
+#undef StackTrace
+#endif
+
 namespace WTF {
 
 class PrintStream;

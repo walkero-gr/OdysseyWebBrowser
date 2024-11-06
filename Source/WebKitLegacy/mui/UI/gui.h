@@ -4,7 +4,13 @@
 #include <exec/types.h>
 #include <proto/utility.h>
 #include <utility/date.h>
+#if defined(__AROS__)
 #include <clib/debug_protos.h>
+#endif
+
+#if defined(__amigaos4__)
+typedef   signed long long		QUAD;
+#endif
 
 #include "classes.h"
 #include "methodstack.h"

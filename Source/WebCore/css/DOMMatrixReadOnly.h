@@ -32,7 +32,12 @@
 #include <JavaScriptCore/Float32Array.h>
 #include <JavaScriptCore/Float64Array.h>
 #include <wtf/RefCounted.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/css/DOMMatrixReadOnly.h Variant"
+#include <variant>
+#endif // OS(AROS>
 #include <wtf/Vector.h>
 #include <wtf/text/WTFString.h>
 

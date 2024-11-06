@@ -25,6 +25,7 @@
 #include "Frame.h"
 #include "HTMLMediaElement.h"
 #include "HostWindow.h"
+#include "HTMLInputElement.h"
 #include "InputType.h"
 #include "InputTypeNames.h"
 #include "MediaControlElements.h"
@@ -39,10 +40,18 @@
 #include "StringTruncator.h"
 #include "wtf/text/CString.h"
 
+#if OS(AMIGAOS)
+#define DOS_DOSEXTENS_H
 #include <proto/dos.h>
+#undef DOS_DOSEXTENS_H
+#else
+#include <proto/dos.h>
+#endif
 
+#if OS(AROS)
 #include <clib/debug_protos.h>
 #define D(x)
+#endif
 
 extern char *utf8_to_local(const char *);
 

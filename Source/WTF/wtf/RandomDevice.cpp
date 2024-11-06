@@ -29,6 +29,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <cstdio>
 
 #if !OS(DARWIN) && !OS(FUCHSIA) && OS(UNIX)
 #include <errno.h>
@@ -64,7 +65,7 @@ NEVER_INLINE NO_RETURN_DUE_TO_CRASH static void crashUnableToReadFromURandom()
 }
 #endif
 
-#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS) && !OS(AROS)
+#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS) && !OS(AROS) && !OS(AMIGAOS)
 RandomDevice::RandomDevice()
 {
     int ret = 0;
@@ -86,7 +87,7 @@ RandomDevice::~RandomDevice()
 }
 #endif
 
-#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS) && !OS(AROS)
+#if !OS(DARWIN) && !OS(FUCHSIA) && !OS(WINDOWS) && !OS(AROS) && !OS(AMIGAOS)
 RandomDevice::~RandomDevice()
 {
     close(m_fd);
@@ -112,6 +113,13 @@ void RandomDevice::cryptographicallyRandomValues(unsigned char* buffer, size_t l
                 crashUnableToReadFromURandom();
         } else
             amountRead += currentRead;
+    }
+#elif OS(AMIGAOS)
+    FILE *fd = fopen("RANDOM:", "r");
+    if(fd)
+    {
+        fread(buffer, length, 1, fd);
+        fclose(fd);
     }
 #elif OS(WINDOWS)
     // FIXME: We cannot ensure that Cryptographic Service Provider context and CryptGenRandom are safe across threads.

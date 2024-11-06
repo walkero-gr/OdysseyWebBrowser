@@ -27,7 +27,12 @@
 #pragma once
 
 #include "Reg.h"
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/JavaScriptCore/jit/SnippetReg.h Variant"
+#include <variant>
+#endif // OS(AROS)
 
 #if ENABLE(JIT)
 

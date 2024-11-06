@@ -25,7 +25,12 @@
 #pragma once
 
 #include "DOMURL.h"
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/html/URLSearchParams.h Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/Vector.h>
 #include <wtf/text/WTFString.h>
 

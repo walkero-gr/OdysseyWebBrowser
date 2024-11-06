@@ -30,7 +30,12 @@
 #include "Position.h"
 #include "Timer.h"
 #include <wtf/Noncopyable.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/editing/AlternativeTextController.h Variant"
+#include <variant>
+#endif // OS(AROS)
 
 namespace WebCore {
 

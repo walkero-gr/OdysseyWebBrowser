@@ -35,7 +35,9 @@
 #include <wtf/text/StringView.h>
 
 #include <stdio.h>
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 #include "gui.h"
 
 

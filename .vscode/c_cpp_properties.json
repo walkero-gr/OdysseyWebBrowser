@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "OS4 clib4",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${SDK_PATH}/clib4/include/**",
+                "${SDK_PATH}/include/include_h/**",
+                "${MUI50_INC}"
+            ],
+            "defines": [
+                "USE_CURL",
+                "HAVE_TIMEGM",
+                "WTF_OS_AMIGAOS",
+                "WTF_PLATFORM_MUI",
+                "__USE_GNU",
+                "_GNU_SOURCE",
+                "NDEBUG"
+            ],
+            "compilerPath": "/opt/ppc-amigaos/bin/ppc-amigaos-gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x86"
+        }
+    ],
+    "version": 4
+}

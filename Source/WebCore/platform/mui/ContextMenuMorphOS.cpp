@@ -34,8 +34,10 @@
 #include <proto/intuition.h>
 #include <libraries/mui.h>
 #include <proto/muimaster.h>
+#if OS(AROS)
 #include <clib/alib_protos.h>
 #include <clib/debug_protos.h>
+#endif
 
 #include "include/macros/vapor.h"
 #include "owb_cat.h"

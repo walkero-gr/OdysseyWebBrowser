@@ -27,14 +27,22 @@
 
 #include <JavaScriptCore/ArrayBuffer.h>
 #include <JavaScriptCore/ArrayBufferView.h>
-#include <wtf/RefPtr.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
-
+#else
+#warning "Source/WebCore/bindings/js/BufferSource.h Variant"
+#include <variant>
+#endif // OS(AROS)
+#include <wtf/RefPtr.h>
 namespace WebCore {
 
 class BufferSource {
 public:
+#if OS(AROS)
     using VariantType = WTF::Variant<RefPtr<JSC::ArrayBufferView>, RefPtr<JSC::ArrayBuffer>>;
+#else
+    using VariantType = std::variant<RefPtr<JSC::ArrayBufferView>, RefPtr<JSC::ArrayBuffer>>;
+#endif
 
     BufferSource() { }
     BufferSource(VariantType&& variant)
@@ -45,14 +53,24 @@ public:
 
     const uint8_t* data() const
     {
-        return WTF::visit([](auto& buffer) -> const uint8_t* {
+#if OS(AROS)
+        return WTF::visit([](auto& buffer) -> const uint8_t*
+#else
+        return std::visit([](auto& buffer) -> const uint8_t*
+#endif
+        {
             return buffer ? static_cast<const uint8_t*>(buffer->data()) : nullptr;
         }, m_variant);
     }
 
     size_t length() const
     {
-        return WTF::visit([](auto& buffer) -> size_t {
+#if OS(AROS)
+        return WTF::visit([](auto& buffer) -> size_t
+#else
+        return std::visit([](auto& buffer) -> size_t
+#endif
+        {
             return buffer ? buffer->byteLength() : 0;
         }, m_variant);
     }

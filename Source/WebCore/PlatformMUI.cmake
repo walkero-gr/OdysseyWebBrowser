@@ -33,23 +33,6 @@ list(APPEND WebCore_SOURCES
     platform/graphics/ImageSource.cpp
     platform/graphics/WOFFFileFormat.cpp
 
-    platform/graphics/mui/acinerella.c
-    platform/graphics/mui/AcinerellaAudioDecoder.cpp
-    platform/graphics/mui/AcinerellaBuffer.cpp
-    platform/graphics/mui/AcinerellaContainer.cpp
-    platform/graphics/mui/AcinerellaDecoder.cpp
-    platform/graphics/mui/AcinerellaHLS.cpp
-    platform/graphics/mui/AcinerellaMuxer.cpp
-    platform/graphics/mui/AcinerellaPointer.cpp
-    platform/graphics/mui/AcinerellaVideoDecoder.cpp
-    platform/graphics/mui/AudioTrackPrivateMorphOS.cpp
-    platform/graphics/mui/MediaDescriptionMorphOS.cpp
-    platform/graphics/mui/MediaPlayerPrivateMorphOS.cpp
-    platform/graphics/mui/MediaSampleMorphOS.cpp
-    platform/graphics/mui/MediaSourceBufferPrivateMorphOS.cpp
-    platform/graphics/mui/MediaSourcePrivateMorphOS.cpp
-    platform/graphics/mui/VideoTrackPrivateMorphOS.cpp
-
     platform/linux/FileIOLinux.cpp
 
     platform/mui/ContextMenuMorphOS.cpp
@@ -95,6 +78,28 @@ list(APPEND WebCore_SOURCES
     platform/text/TextCodecICU.cpp
     platform/text/TextEncodingDetectorICU.cpp
 )
+
+
+if (ENABLE_VIDEO AND ENABLE_VIDEO_TRACK)
+list(APPEND WebCore_SOURCES
+    platform/graphics/mui/acinerella.c
+    platform/graphics/mui/AcinerellaAudioDecoder.cpp
+    platform/graphics/mui/AcinerellaBuffer.cpp
+    platform/graphics/mui/AcinerellaContainer.cpp
+    platform/graphics/mui/AcinerellaDecoder.cpp
+    platform/graphics/mui/AcinerellaHLS.cpp
+    platform/graphics/mui/AcinerellaMuxer.cpp
+    platform/graphics/mui/AcinerellaPointer.cpp
+    platform/graphics/mui/AcinerellaVideoDecoder.cpp
+    platform/graphics/mui/AudioTrackPrivateMorphOS.cpp
+    platform/graphics/mui/MediaDescriptionMorphOS.cpp
+    platform/graphics/mui/MediaPlayerPrivateMorphOS.cpp
+    platform/graphics/mui/MediaSampleMorphOS.cpp
+    platform/graphics/mui/MediaSourceBufferPrivateMorphOS.cpp
+    platform/graphics/mui/MediaSourcePrivateMorphOS.cpp
+    platform/graphics/mui/VideoTrackPrivateMorphOS.cpp
+)
+endif ()
 
 list(APPEND WebCore_LIBRARIES
     ${CAIRO_LIBRARIES}

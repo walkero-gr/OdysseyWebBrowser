@@ -66,7 +66,7 @@
 
 #endif
 
-#if OS(AROS)
+#if OS(AROS) || OS(AMIGAOS)
 #include <semaphore.h>
 #endif
 
@@ -161,7 +161,9 @@ void Thread::signalHandlerSuspendResume(int, siginfo_t*, void* ucontext)
     sigset_t blockedSignalSet;
     sigfillset(&blockedSignalSet);
     sigdelset(&blockedSignalSet, SigThreadSuspendResume);
+#if !OS(AMIGAOS)
     sigsuspend(&blockedSignalSet);
+#endif
 
     thread->m_platformRegisters = nullptr;
 

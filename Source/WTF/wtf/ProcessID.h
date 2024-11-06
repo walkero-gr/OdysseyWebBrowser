@@ -33,7 +33,13 @@
 #include <windows.h>
 #endif
 
-#if PLATFORM(MUI)
+#if OS(AMIGAOS)
+// #include <unistd.h>
+// #include <exec/tasks.h>
+#include <proto/exec.h>
+#endif
+
+#if PLATFORM(MUI) && !OS(AMIGAOS)
 #include <proto/exec.h>
 #endif
 
@@ -41,6 +47,8 @@ namespace WTF {
 
 #if OS(WINDOWS)
 using ProcessID = int;
+#elif OS(AMIGAOS)
+using ProcessID = ULONG;
 #else
 using ProcessID = pid_t;
 #endif
@@ -49,6 +57,8 @@ inline ProcessID getCurrentProcessID()
 {
 #if OS(WINDOWS)
     return GetCurrentProcessId();
+#elif OS(AMIGAOS)
+    return (ProcessID) FindTask(NULL);
 #elif PLATFORM(MUI)
     // FIXME: wrong for 64-bits
     return (int) (IPTR) FindTask(NULL);

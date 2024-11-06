@@ -28,9 +28,9 @@
 
 #include <exec/lists.h>
 #include <string.h>
-#include <aros/debug.h>
 
 #if OS(AROS)
+#include <aros/debug.h>
 
 #include "mui/execallocator.h"
 #include "mui/arosbailout.h"

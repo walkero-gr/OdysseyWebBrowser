@@ -37,7 +37,13 @@
 #include <proto/muimaster.h>
 #include <clib/alib_protos.h>
 #include <libraries/gadtools.h>
+#if defined(__AROS__)
 #include <aros-overrides.h>
+#endif
+
+#if defined(__amigaos4__)
+#define IPTR ULONG
+#endif
 
 #include <cstdio>
 

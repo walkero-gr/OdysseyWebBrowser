@@ -36,7 +36,8 @@ namespace PAL {
 
 void systemBeep()
 {
-    DisplayBeep(NULL);
+    #warning "DisplayBeep() is not implemented"
+    // DisplayBeep(NULL);
 }
 
 }

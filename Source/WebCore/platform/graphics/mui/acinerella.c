@@ -16,6 +16,9 @@
  * along with Acinerella.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#if ENABLE(VIDEO)
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1625,3 +1628,5 @@ error:
 
 	return 0;
 }
+
+#endif /* ENABLE(VIDEO) */

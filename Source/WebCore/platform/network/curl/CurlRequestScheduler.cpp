@@ -33,11 +33,25 @@
 #include "CurlRequestSchedulerClient.h"
 
 #if PLATFORM(MUI)
-#include <proto/exec.h>
-#include <proto/bsdsocket.h>
+
+#if OS(AMIGAOS)
+    #include <proto/exec.h>
+    #define DOS_DOSEXTENS_H
+    #include <proto/dos.h>
+    #include <proto/bsdsocket.h>
+    #undef DOS_DOSEXTENS_H
+    #define IPTR ULONG
+#else
+    #include <proto/exec.h>
+    #include <proto/bsdsocket.h>
+#endif // OS(AMIGAOS)
+
 #include <unistd.h>
 #include <bsdsocket/socketbasetags.h>
-#include <aros/debug.h>
+
+#if OS(AROS)
+    #include <aros/debug.h>
+#endif
 struct Library *SocketBase;
 void init_SocketBase()
 {
@@ -47,7 +61,11 @@ void init_SocketBase()
         SBTM_SETVAL(SBTC_LOGTAGPTR),       (IPTR) "cURL",
         TAG_DONE))
     {
+#if OS(AROS)
         asm("int3");
+#else
+        asm("trap");
+#endif
     }
 }
 void close_SocketBase()

@@ -27,13 +27,22 @@
 
 #include "FillMode.h"
 #include "PlaybackDirection.h"
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/animation/EffectTiming.h Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/text/WTFString.h>
 
 namespace WebCore {
 
 struct EffectTiming {
+#if OS(AROS)
     Variant<double, String> duration { "auto" };
+#else
+    std::variant<double, String> duration { "auto" };
+#endif // OS(AROS)
     double delay { 0 };
     double endDelay { 0 };
     double iterationStart { 0 };

@@ -33,6 +33,7 @@
 #include <signal.h>
 #elif OS(WINDOWS)
 #include <windows.h>
+#elif OS(AMIGAOS)
 #else
 #include <ucontext.h>
 #endif

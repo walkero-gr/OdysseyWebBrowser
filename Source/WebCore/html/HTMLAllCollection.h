@@ -27,7 +27,12 @@
 
 #include "AllDescendantsCollection.h"
 #include <wtf/Optional.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/html/HTMLAllCollection.h Variant"
+#include <variant>
+#endif // OS(AROS)
 
 namespace WebCore {
 

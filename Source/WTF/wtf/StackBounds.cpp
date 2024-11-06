@@ -33,6 +33,10 @@
 
 #include <windows.h>
 
+#elif OS(AMIGAOS)
+
+#include <proto/exec.h>
+
 #elif PLATFORM(MUI)
 
 #include <exec/exec.h>
@@ -129,7 +133,7 @@ StackBounds StackBounds::currentThreadStackBoundsInternal()
 //    m_bound =  ppcsplower;/*estimateStackBound(m_origin);*/
 //}
 
-#elif OS(AROS)
+#elif OS(AROS) || OS(AMIGAOS)
 
 StackBounds StackBounds::newThreadStackBounds(PlatformThreadHandle thread)
 {

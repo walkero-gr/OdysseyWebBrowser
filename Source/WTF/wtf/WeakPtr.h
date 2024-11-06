@@ -175,6 +175,8 @@ template<typename T> template<typename U> inline WeakPtr<T>& WeakPtr<T>::operato
 
 template<typename T> inline WeakPtr<T> makeWeakPtr(T& ref)
 {
+    // #warning "Not implemented for AmigaOS 4"
+    // return { };
     return { adoptRef(*weak_reference_downcast<T>(ref.weakPtrFactory().createWeakPtr(ref).m_ref.leakRef())) };
 }
 

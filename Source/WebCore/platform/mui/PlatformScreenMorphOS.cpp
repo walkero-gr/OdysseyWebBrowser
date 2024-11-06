@@ -43,11 +43,14 @@
 #include <cybergraphx/cybergraphics.h>
 #include <libraries/mui.h>
 #include <proto/muimaster.h>
-#include <proto/alib.h>
 #include <utility/tagitem.h>
+#if defined(__AROS__)
+#include <proto/alib.h>
 #include <aros-overrides.h>
-
-
+#endif
+#if defined(__amigaos4__)
+#define IPTR ULONG
+#endif
 namespace WebCore {
 
 int screenHorizontalDPI(Widget* widget) 

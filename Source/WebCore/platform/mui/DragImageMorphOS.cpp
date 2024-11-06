@@ -29,9 +29,14 @@
 #include "RefPtrCairo.h"
 #include "gui.h"
 #include <cairo.h>
-#include <clib/debug_protos.h>
 
+#if OS(AROS)
+#include <clib/debug_protos.h>
+#endif
+
+#ifndef D
 #define D(x)
+#endif
 
 namespace WebCore {
 

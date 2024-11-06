@@ -52,13 +52,22 @@
 #include <wtf/HashMap.h>
 
 #if PLATFORM(MUI)
+#if OS(AMIGAOS)
+#define native latin1
+#warning "Use libraries charsets.h, like Morphos below"
+#define DOS_DOSEXTENS_H
+#include <proto/dos.h>
+#undef DOS_DOSEXTENS_H
+#include <fnmatch.h>
+#endif
 #if OS(MORPHOS)
 #include <libraries/charsets.h>
+#include <proto/dos.h>
 #endif
 #if OS(AROS)
 #define native latin1
-#endif
 #include <proto/dos.h>
+#endif
 #endif
 
 namespace WTF {

@@ -24,11 +24,41 @@
  */
 
 #include "execallocator.h"
+// #if defined(__AROS__)
 #include "arosbailout.h"
+// #endif
 
+#if defined(__amigaos4__)
+#include "../../../WebCore/platform/mui/debug.h"
+// #include <dos/dosextens.h>
+// #include <exec/execbase.h>
+#include <exec/lists.h>
+#ifndef PROTO_EXEC_H
+#include <proto/exec.h>
+#endif /* PROTO_EXEC_H */
+
+#undef NEWLIST
+#define NEWLIST(x)                                       \
+  do{                                                    \
+        (x)->lh_Head     = (struct Node *) &(x)->lh_Tail;  \
+        (x)->lh_Tail     = NULL;                          \
+        (x)->lh_TailPred = (struct Node *) &(x)->lh_Head;  \
+    }while(0)
+
+#define IPTR ULONG
+
+#define ForeachNode(list, node)                        \
+for                                                    \
+(                                                      \
+    *(void **)&node = (void *)(((struct List *)(list))->lh_Head); \
+    ((struct Node *)(node))->ln_Succ;                  \
+    *(void **)&node = (void *)(((struct Node *)(node))->ln_Succ)  \
+)
+#else
 #include <proto/alib.h>
 #include <exec/lists.h>
 #include <aros/debug.h>
+#endif
 
 #undef PAGESIZE
 #define PAGESIZE                (4096)
@@ -79,11 +109,15 @@ PageAllocator::~PageAllocator()
 {
     void * n, *n1;
 
+#if defined(__AROS__)
     ForeachNodeSafe(&blocks, n, n1)
     {
         PageAllocator::PageBlock * block = (PageAllocator::PageBlock *)n;
         freeBlock(block);
     }
+#else
+#warning "PageAllocator::~PageAllocator() not implemented"
+#endif
 }
 
 void PageAllocator::reportBlockUsage()
@@ -91,6 +125,7 @@ void PageAllocator::reportBlockUsage()
     void * n, *n1;
     ULONG totalpages = 0;
 
+#if defined(__AROS__)
     bug("PageAllocator block usage\n");
     bug("-------------------------\n");
     ForeachNodeSafe(&blocks, n, n1)
@@ -104,6 +139,9 @@ void PageAllocator::reportBlockUsage()
     }
     bug("Total allocated size: %d KB\n", totalpages * PAGESIZE / 1024);
     bug("-------------------------\n");
+#else
+#warning "PageAllocator::~PageAllocator() not implemented"
+#endif
 }
 
 PageAllocator::PageBlock * PageAllocator::allocateNewBlock(size_t count)
@@ -286,7 +324,7 @@ void PageAllocator::freePages(void * address, size_t count)
            IPTR relative = addr - block->pb_StartAddress;
            int pos = relative / PAGESIZE;
            for (size_t i = 0; i < count; i++)
-               block->pb_PagesBitMap[i + pos] = 0;
+            //    block->pb_PagesBitMap[i + pos] = 0;
            block->pb_FreePages += count;
 
            /* Check if block can be freed */

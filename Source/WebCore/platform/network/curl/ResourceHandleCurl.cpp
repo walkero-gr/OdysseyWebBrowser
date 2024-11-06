@@ -52,11 +52,13 @@
 
 #if PLATFORM(MUI)
 #include "gui.h"
+#if OS(AROS)
 #include <clib/debug_protos.h>
 #define D(x)
 #undef String
-#undef set
 #undef get
+#endif // OS(AROS)
+#undef set
 #endif
 
 namespace WebCore {

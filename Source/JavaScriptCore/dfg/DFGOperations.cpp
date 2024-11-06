@@ -78,7 +78,9 @@
 #include "TypedArrayInlines.h"
 #include "VMInlines.h"
 #include <wtf/InlineASM.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#endif // OS(AROS)
 
 #if ENABLE(JIT)
 #if ENABLE(DFG_JIT)

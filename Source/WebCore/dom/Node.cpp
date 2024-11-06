@@ -75,7 +75,12 @@
 #include <wtf/IsoMallocInlines.h>
 #include <wtf/RefCountedLeakCounter.h>
 #include <wtf/SHA1.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/dom/Node.cpp Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/text/CString.h>
 #include <wtf/text/StringBuilder.h>
 

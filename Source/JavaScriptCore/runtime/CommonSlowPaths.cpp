@@ -66,7 +66,12 @@
 #include "ThunkGenerators.h"
 #include "TypeProfilerLog.h"
 #include <wtf/StringPrintStream.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/JavaScriptCore/runtime/CommonSlowPaths.cpp Variant"
+#include <variant>
+#endif // OS(AROS)
 
 namespace JSC {
 

@@ -3,7 +3,9 @@
 
 #include "include/macros/vapor.h"
 
+#if defined(__AROS__)
 #include <proto/alib.h>
+#endif
 #include <exec/exec.h>
 #include <proto/exec.h>
 #include <utility/tagitem.h>
@@ -17,6 +19,11 @@
 #endif
 #include <libraries/mui.h>
 #include <proto/muimaster.h>
+
+#if defined(__amigaos4__)
+#define STACKED
+#define IPTR ULONG
+#endif
 
 #define DEFCLASS(s) ULONG create_##s##class(void); \
     struct IClass *get##s##class(void); \

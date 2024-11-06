@@ -57,7 +57,15 @@
 #include <proto/exec.h>    
 #include <proto/iffparse.h>
 #include <proto/intuition.h>
+
+#if OS(AMIGAOS)
+#define DOS_DOSEXTENS_H
 #include <proto/datatypes.h>
+#undef DOS_DOSEXTENS_H
+#else
+#include <proto/datatypes.h>
+#endif
+
 #include <proto/iffparse.h>
 #include <datatypes/textclass.h>
 #include <datatypes/pictureclass.h>

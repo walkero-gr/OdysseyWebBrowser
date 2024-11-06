@@ -38,7 +38,9 @@
 #endif
 
 #include <sys/stat.h>
+#if OS(AROS)
 #include <aros/debug.h>
+#endif
 
 namespace WebCore {
 

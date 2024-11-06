@@ -26,8 +26,10 @@
 #define CODESET_LOCAL   2
 #endif
 
+#if !defined(__amigaos4__)
 typedef int int32;
 typedef unsigned int uint32;
+#endif
 
 struct IFFCodeSet
 {

@@ -44,7 +44,9 @@
 
 #include <cstdio>
 
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 
 namespace WebCore {
 

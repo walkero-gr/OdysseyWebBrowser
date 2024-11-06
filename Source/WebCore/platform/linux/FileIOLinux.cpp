@@ -41,8 +41,14 @@
 #if !OS(AROS)
 #include <proto/asyncio.h>
 #endif
+#if OS(AROS)
 #include <clib/debug_protos.h>
 #define D(x)
+#endif // OS(AROS)
+#if OS(AMIGAOS)
+#include <dos/obsolete.h>
+#include "../mui/debug.h"
+#endif // OS(AMIGAOS)
 #endif
 
 namespace WebCore {
@@ -51,14 +57,24 @@ OWBFile::OWBFile(const String path)
 	: m_fd(0)
     , m_filePath(path)
 {
+#if OS(AROS)
 	D(kprintf("[File] File(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
+#elif OS(AMIGAOS)
+	D(bug("[File] File(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
+#endif
 }
 
 OWBFile::~OWBFile()
 {
+#if OS(AROS)
 	D(kprintf("[File] ~File(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
 	close();
 	D(kprintf("[File] ~File() OK\n"));
+#elif OS(AMIGAOS)
+	D(bug("[File] ~File(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
+	close();
+	D(bug("[File] ~File() OK\n"));
+#endif
 }
 
 #if !OS(AROS)
@@ -69,7 +85,7 @@ int OWBFile::open(char openType)
 	
 	stccpy(name, m_filePath.latin1().data(), sizeof(name));
 
-	D(kprintf("[File] open(%s, '%c')\n", name, openType));
+	D(bug("[File] open(%s, '%c')\n", name, openType));
 
 	// Check that m_fd is 0, if that's not the case it means that an open file
     // has not been closed, so close it before continuing.
@@ -106,7 +122,7 @@ int OWBFile::open(char openType)
 	if(fd)
 	{
 		m_fd = (void *) fd;
-		D(kprintf("[File] Opened <%s> successfully (0x%p)\n", m_filePath.latin1().data(), m_fd));
+		D(bug("[File] Opened <%s> successfully (0x%p)\n", m_filePath.latin1().data(), m_fd));
 	}
 	else
 	{
@@ -122,19 +138,21 @@ void OWBFile::close()
 {
 	if (m_fd)
 	{
+#if !OS(AMIGAOS) // TODO: This might need to be enabled or restructured. Old Odyseey had that code disabled
 		if((int) m_fd < 0x1000)
 		{
-			kprintf("[File] m_fd 0x%p is highly suspicious, skipping\n", m_fd);
-			kprintf("[File] Dumping task state\n");
+			D(bug("[File] m_fd 0x%p is highly suspicious, skipping\n", m_fd));
+			D(bug("[File] Dumping task state\n"));
 			DumpTaskState(FindTask(NULL));
 			m_fd = 0;
 			return;
 		}
+#endif
 
-		D(kprintf("[File] close(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
+		D(bug("[File] close(%s) (0x%p)\n", m_filePath.latin1().data(), m_fd));
 		CloseAsync((struct AsyncFile *) m_fd);
 		m_fd = 0;
-    }
+	}
 }
 
 char* OWBFile::read(size_t size)
@@ -158,13 +176,13 @@ void OWBFile::write(String dataToWrite)
     // Check that we try to write on a valid file descriptor.
 	if(m_fd)
 	{
-                char *data = strdup(dataToWrite.utf8().data()); // XXX: might not be needed, but weird trashes sometimes...
+		char *data = strdup(dataToWrite.utf8().data()); // XXX: might not be needed, but weird trashes sometimes...
 		int len = dataToWrite.length();
 		if(data)
 		{
-		    WriteAsync((struct AsyncFile *) m_fd, (APTR) data, len);
-		    //WriteAsync((struct AsyncFile *) m_fd,(APTR) dataToWrite.utf8().data(), dataToWrite.length());
-		    free(data);
+			WriteAsync((struct AsyncFile *) m_fd, (APTR) data, len);
+			//WriteAsync((struct AsyncFile *) m_fd,(APTR) dataToWrite.utf8().data(), dataToWrite.length());
+			free(data);
 		}
 	}
 }
@@ -184,11 +202,11 @@ int OWBFile::getSize()
     // If file descriptor is not valid then return a size of -1
 	if (m_fd)
 	{
-	    //save the current offset
+		//save the current offset
 		current = (int) SeekAsync((struct AsyncFile *) m_fd, 0, MODE_END);
 		fileSize = (int) SeekAsync((struct AsyncFile *) m_fd, current, MODE_START);
 
-	    return fileSize;
+		return fileSize;
 	}
 	else
 	{

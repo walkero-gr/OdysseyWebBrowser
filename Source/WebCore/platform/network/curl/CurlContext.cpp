@@ -967,7 +967,14 @@ Optional<size_t> CurlSocketHandle::receive(uint8_t* buffer, size_t bufferSize)
 }
 
 #if PLATFORM(MUI)
-#include <proto/bsdsocket.h>
+#if OS(AMIGAOS)
+    #define DOS_DOSEXTENS_H
+    #include <proto/dos.h>
+    #include <proto/bsdsocket.h>
+    #undef DOS_DOSEXTENS_H
+#else
+    #include <proto/bsdsocket.h>
+#endif /* OS(AMIGAOS) */
 #endif
 
 namespace WebCore {

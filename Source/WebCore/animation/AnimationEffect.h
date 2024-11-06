@@ -42,7 +42,12 @@
 #include <wtf/RefCounted.h>
 #include <wtf/RefPtr.h>
 #include <wtf/Seconds.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/animation/AnimationEffect.h Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/WeakPtr.h>
 
 namespace WebCore {

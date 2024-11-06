@@ -39,7 +39,9 @@
 #include <wtf/ASCIICType.h>
 #include <wtf/HexNumber.h>
 
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 #include <proto/keymap.h>
 #include <proto/diskfont.h>
 #include <diskfont/diskfonttag.h>

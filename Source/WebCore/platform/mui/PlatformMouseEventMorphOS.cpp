@@ -35,7 +35,9 @@
 #include <math.h>
 #include <intuition/intuition.h>
 #include <proto/intuition.h>
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 
 namespace WebCore {
 

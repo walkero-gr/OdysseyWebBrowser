@@ -28,7 +28,12 @@
 #include "CSSFontFace.h"
 #include "CSSPropertyNames.h"
 #include "DOMPromiseProxy.h"
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/WebCore/css/FontFace.h Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/WeakPtr.h>
 
 namespace JSC {
@@ -45,12 +50,18 @@ public:
         String weight;
         String stretch;
         String unicodeRange;
+#if OS(AROS)
         String variant;
+#endif // OS(AROS)
         String featureSettings;
         String display;
     };
     
+#if OS(AROS)
     using Source = Variant<String, RefPtr<JSC::ArrayBuffer>, RefPtr<JSC::ArrayBufferView>>;
+#else
+    using Source = std::variant<String, RefPtr<JSC::ArrayBuffer>, RefPtr<JSC::ArrayBufferView>>;
+#endif // OS(AROS)
     static ExceptionOr<Ref<FontFace>> create(Document&, const String& family, Source&&, const Descriptors&);
     static Ref<FontFace> create(CSSFontFace&);
     virtual ~FontFace();
@@ -69,7 +80,9 @@ public:
     String weight() const;
     String stretch() const;
     String unicodeRange() const;
+#if OS(AROS)
     String variant() const;
+#endif // OS(AROS)
     String featureSettings() const;
     String display() const;
 

@@ -444,6 +444,10 @@
 #define WTF_OS_MORPHOS 1
 #endif
 
+#if defined(__amigaos4__)
+#define WTF_OS_AMIGAOS 1
+#endif
+
 /* Operating environments */
 
 /* CPU(BIG_ENDIAN) or CPU(MIDDLE_ENDIAN) or neither, as appropriate. */
@@ -549,7 +553,7 @@
 #endif
 #elif OS(WINDOWS)
 #define WTF_PLATFORM_WIN 1
-#elif OS(AROS)
+#elif OS(AROS) || OS(AMIGAOS)
 #define WTF_PLATFORM_MUI 1
 #endif
 
@@ -698,7 +702,7 @@
 #endif
 #endif /* OS(DARWIN) */
 
-#if OS(UNIX)
+#if OS(UNIX) || OS(AMIGAOS)
 #define USE_PTHREADS 1
 #endif /* OS(UNIX) */
 

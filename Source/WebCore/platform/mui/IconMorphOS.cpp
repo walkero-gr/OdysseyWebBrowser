@@ -37,7 +37,9 @@
 #include "BitmapImage.h"
 
 #include <cstdio>
+#if OS(AROS)
 #include <clib/debug_protos.h>
+#endif
 #include "utils.h"
 
 namespace WebCore {

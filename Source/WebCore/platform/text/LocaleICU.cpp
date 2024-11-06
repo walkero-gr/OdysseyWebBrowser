@@ -38,6 +38,9 @@
 #include <wtf/DateMath.h>
 #include <wtf/text/StringBuilder.h>
 
+#ifndef TRUE
+#   define TRUE  1
+#endif
 
 namespace WebCore {
 using namespace icu;

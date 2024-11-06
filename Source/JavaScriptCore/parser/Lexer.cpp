@@ -39,7 +39,12 @@
 #include <string.h>
 #include <wtf/Assertions.h>
 #include <wtf/HexNumber.h>
+#if OS(AROS)
 #include <wtf/Variant.h>
+#else
+#warning "Source/JavaScriptCore/parser/Lexer.cpp Variant"
+#include <variant>
+#endif // OS(AROS)
 #include <wtf/dtoa.h>
 
 namespace JSC {
