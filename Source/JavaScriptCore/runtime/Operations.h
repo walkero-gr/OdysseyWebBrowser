@@ -26,12 +26,7 @@
 #include "JSBigInt.h"
 #include "JSCJSValue.h"
 #include "JSCJSValueInlines.h"
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/JavaScriptCore/runtime/Operations.h Variant"
-#include <variant>
-#endif // OS(AROS)
 
 namespace JSC {
 
@@ -478,27 +473,16 @@ ALWAYS_INLINE JSValue jsSub(ExecState* exec, JSValue v1, JSValue v2)
     auto rightNumeric = v2.toNumeric(exec);
     RETURN_IF_EXCEPTION(scope, { });
 
-#if OS(AROS)
     if (WTF::holds_alternative<JSBigInt*>(leftNumeric) || WTF::holds_alternative<JSBigInt*>(rightNumeric)) {
         if (WTF::holds_alternative<JSBigInt*>(leftNumeric) && WTF::holds_alternative<JSBigInt*>(rightNumeric)) {
             scope.release();
             return JSBigInt::sub(exec, WTF::get<JSBigInt*>(leftNumeric), WTF::get<JSBigInt*>(rightNumeric));
-#else
-    if (std::holds_alternative<JSBigInt*>(leftNumeric) || std::holds_alternative<JSBigInt*>(rightNumeric)) {
-        if (std::holds_alternative<JSBigInt*>(leftNumeric) && std::holds_alternative<JSBigInt*>(rightNumeric)) {
-            scope.release();
-            return JSBigInt::sub(exec, std::get<JSBigInt*>(leftNumeric), std::get<JSBigInt*>(rightNumeric));
-#endif // OS(AROS)
         }
 
         return throwTypeError(exec, scope, "Invalid mix of BigInt and other type in subtraction."_s);
     }
 
-#if OS(AROS)
     return jsNumber(WTF::get<double>(leftNumeric) - WTF::get<double>(rightNumeric));
-#else
-    return jsNumber(std::get<double>(leftNumeric) - std::get<double>(rightNumeric));
-#endif // OS(AROS)
 }
 
 ALWAYS_INLINE JSValue jsMul(ExecState* state, JSValue v1, JSValue v2)
@@ -506,8 +490,6 @@ ALWAYS_INLINE JSValue jsMul(ExecState* state, JSValue v1, JSValue v2)
     VM& vm = state->vm();
     auto scope = DECLARE_THROW_SCOPE(vm);
 
-
-#if OS(AROS)
     Variant<JSBigInt*, double> leftNumeric = v1.toNumeric(state);
     RETURN_IF_EXCEPTION(scope, { });
     Variant<JSBigInt*, double> rightNumeric = v2.toNumeric(state);
@@ -517,30 +499,14 @@ ALWAYS_INLINE JSValue jsMul(ExecState* state, JSValue v1, JSValue v2)
         if (WTF::holds_alternative<JSBigInt*>(leftNumeric) && WTF::holds_alternative<JSBigInt*>(rightNumeric)) {
             scope.release();
             return JSBigInt::multiply(state, WTF::get<JSBigInt*>(leftNumeric), WTF::get<JSBigInt*>(rightNumeric));
-#else
-    std::variant<JSBigInt*, double> leftNumeric = v1.toNumeric(state);
-    RETURN_IF_EXCEPTION(scope, { });
-    std::variant<JSBigInt*, double> rightNumeric = v2.toNumeric(state);
-    RETURN_IF_EXCEPTION(scope, { });
-
-    if (std::holds_alternative<JSBigInt*>(leftNumeric) || std::holds_alternative<JSBigInt*>(rightNumeric)) {
-        if (std::holds_alternative<JSBigInt*>(leftNumeric) && std::holds_alternative<JSBigInt*>(rightNumeric)) {
-            scope.release();
-            return JSBigInt::multiply(state, std::get<JSBigInt*>(leftNumeric), std::get<JSBigInt*>(rightNumeric));
-#endif // OS(AROS)
         }
 
         throwTypeError(state, scope, "Invalid mix of BigInt and other type in multiplication."_s);
         return { };
     }
 
-#if OS(AROS)
     double leftValue =  WTF::get<double>(leftNumeric);
     double rightValue =  WTF::get<double>(rightNumeric);
-#else
-    double leftValue =  std::get<double>(leftNumeric);
-    double rightValue =  std::get<double>(rightNumeric);
-#endif // OS(AROS)
     return jsNumber(leftValue * rightValue);
 }
 

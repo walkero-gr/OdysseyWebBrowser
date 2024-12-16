@@ -36,12 +36,7 @@
 #include "ScriptWrappable.h"
 #include <memory>
 #include <wtf/Forward.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/dom/EventTarget.h Variant"
-#include <variant>
-#endif // OS(AROS)
 
 namespace WebCore {
 
@@ -85,15 +80,9 @@ public:
         bool once { false };
     };
 
-#if OS(AROS)
     using AddEventListenerOptionsOrBoolean = Variant<AddEventListenerOptions, bool>;
     WEBCORE_EXPORT void addEventListenerForBindings(const AtomicString& eventType, RefPtr<EventListener>&&, AddEventListenerOptionsOrBoolean&&);
     using ListenerOptionsOrBoolean = Variant<ListenerOptions, bool>;
-#else
-    using AddEventListenerOptionsOrBoolean = std::variant<AddEventListenerOptions, bool>;
-    WEBCORE_EXPORT void addEventListenerForBindings(const AtomicString& eventType, RefPtr<EventListener>&&, AddEventListenerOptionsOrBoolean&&);
-    using ListenerOptionsOrBoolean = std::variant<ListenerOptions, bool>;
-#endif
 
     WEBCORE_EXPORT void removeEventListenerForBindings(const AtomicString& eventType, RefPtr<EventListener>&&, ListenerOptionsOrBoolean&&);
     WEBCORE_EXPORT ExceptionOr<bool> dispatchEventForBindings(Event&);

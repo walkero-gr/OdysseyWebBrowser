@@ -34,12 +34,7 @@
 #include "ScriptWrappable.h"
 #include <wtf/URL.h>
 #include "URLRegistry.h"
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/fileapi/Blob.h Variant"
-#include <variant>
-#endif // OS(AROS)
 
 namespace JSC {
 class ArrayBufferView;

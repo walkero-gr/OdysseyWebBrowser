@@ -29,12 +29,7 @@
 #include <JavaScriptCore/JSCJSValue.h>
 #include <JavaScriptCore/SlotVisitor.h>
 #include <JavaScriptCore/Weak.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/bindings/js/JSValueInWrappedObject.h Variant"
-#include <variant>
-#endif // OS(AROS)
 
 namespace WebCore {
 

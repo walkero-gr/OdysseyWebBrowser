@@ -32,12 +32,7 @@
 #include "JSDOMConvertInterface.h"
 #include "JSDOMConvertNull.h"
 #include <JavaScriptCore/IteratorOperations.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/bindings/js/JSDOMConvertUnion.h Variant"
-#include <variant>
-#endif // OS(AROS>
 
 namespace WebCore {
 

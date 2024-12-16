@@ -31,12 +31,7 @@
 #include "Length.h"
 #include "StyleImage.h"
 #include <wtf/RefPtr.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/css/CSSCustomPropertyValue.h Variant"
-#include <variant>
-#endif // OS(AROS>
 #include <wtf/text/WTFString.h>
 
 namespace WebCore {

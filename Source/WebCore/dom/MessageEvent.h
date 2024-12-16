@@ -33,30 +33,17 @@
 #include "SerializedScriptValue.h"
 #include "ServiceWorker.h"
 #include "WindowProxy.h"
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/dom/MessageEvent.h Variant"
-#include <variant>
-#endif // OS(AROS)
 
 namespace WebCore {
 
 class Blob;
 
-#if OS(AROS)
 #if ENABLE(SERVICE_WORKER)
 using MessageEventSource = Variant<RefPtr<WindowProxy>, RefPtr<MessagePort>, RefPtr<ServiceWorker>>;
 #else
 using MessageEventSource = Variant<RefPtr<WindowProxy>, RefPtr<MessagePort>>;
 #endif // ENABLE(SERVICE_WORKER)
-#else
-#if ENABLE(SERVICE_WORKER)
-using MessageEventSource = std::variant<RefPtr<WindowProxy>, RefPtr<MessagePort>, RefPtr<ServiceWorker>>;
-#else
-using MessageEventSource = std::variant<RefPtr<WindowProxy>, RefPtr<MessagePort>>;
-#endif // ENABLE(SERVICE_WORKER)
-#endif // OS(AROS)
 class MessageEvent final : public Event {
 public:
     static Ref<MessageEvent> create(Vector<RefPtr<MessagePort>>&&, Ref<SerializedScriptValue>&&, const String& origin = { }, const String& lastEventId = { }, Optional<MessageEventSource>&& source = WTF::nullopt);

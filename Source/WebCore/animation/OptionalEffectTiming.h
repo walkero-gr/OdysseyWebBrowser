@@ -28,22 +28,13 @@
 #include "FillMode.h"
 #include "PlaybackDirection.h"
 #include "WebAnimationUtilities.h"
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/animation/OptionalEffectTiming.h Variant"
-#include <variant>
-#endif // OS(AROS)
 #include <wtf/text/WTFString.h>
 
 namespace WebCore {
 
 struct OptionalEffectTiming {
-#if OS(AROS)
     Optional<Variant<double, String>> duration;
-#else
-    Optional<std::variant<double, String>> duration;
-#endif // OS(AROS)
     Optional<double> iterations; // This value cannot be a MarkableDouble since we need to check for a NaN value.
     MarkableDouble delay;
     MarkableDouble endDelay;

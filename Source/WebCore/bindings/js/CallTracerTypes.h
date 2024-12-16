@@ -42,12 +42,7 @@
 #include <JavaScriptCore/Float32Array.h>
 #include <JavaScriptCore/Int32Array.h>
 #include <wtf/RefPtr.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/bindings/js/CallTracerTypes.h Variant"
-#include <variant>
-#endif // OS(AROS)
 #include <wtf/Vector.h>
 #include <wtf/text/WTFString.h>
 

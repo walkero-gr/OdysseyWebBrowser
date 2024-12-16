@@ -24,12 +24,7 @@
 
 #include <wtf/Forward.h>
 #include <wtf/OptionSet.h>
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/WebCore/dom/DocumentMarker.h Variant"
-#include <variant>
-#endif // OS(AROS)
 #include <wtf/text/WTFString.h>
 
 #if PLATFORM(IOS_FAMILY)
@@ -104,11 +99,7 @@ public:
     struct DraggedContentData {
         RefPtr<Node> targetNode;
     };
-#if OS(AROS)
     using Data = Variant<IsActiveMatchData, DescriptionData, DictationData, DictationAlternativesData, DraggedContentData>;
-#else
-    using Data = std::variant<IsActiveMatchData, DescriptionData, DictationData, DictationAlternativesData, DraggedContentData>;
-#endif
 
     DocumentMarker(unsigned startOffset, unsigned endOffset, bool isActiveMatch);
     DocumentMarker(MarkerType, unsigned startOffset, unsigned endOffset, const String& description = String());
@@ -207,20 +198,12 @@ inline void DocumentMarker::shiftOffsets(int delta)
 
 inline const String& DocumentMarker::description() const
 {
-#if OS(AROS)
     return WTF::holds_alternative<String>(m_data) ? WTF::get<String>(m_data) : emptyString();
-#else
-    return std::holds_alternative<String>(m_data) ? std::get<String>(m_data) : emptyString();
-#endif
 }
 
 inline bool DocumentMarker::isActiveMatch() const
 {
-#if OS(AROS)
     return WTF::holds_alternative<bool>(m_data) && WTF::get<bool>(m_data);
-#else
-    return std::holds_alternative<bool>(m_data) && std::get<bool>(m_data);
-#endif
 }
 
 inline void DocumentMarker::setActiveMatch(bool isActiveMatch)
@@ -249,38 +232,22 @@ inline bool DocumentMarker::isDictation() const
 
 inline const Vector<String>& DocumentMarker::alternatives() const
 {
-#if OS(AROS)
     return WTF::get<DictationAlternativesData>(m_data).alternatives;
-#else
-    return std::get<DictationAlternativesData>(m_data).alternatives;
-#endif
 }
 
 inline void DocumentMarker::setAlternative(const String& alternative, size_t index)
 {
-#if OS(AROS)
     WTF::get<DictationAlternativesData>(m_data).alternatives[index] = alternative;
-#else
-    std::get<DictationAlternativesData>(m_data).alternatives[index] = alternative;
-#endif
 }
 
 inline id DocumentMarker::metadata() const
 {
-#if OS(AROS)
     return WTF::get<DictationAlternativesData>(m_data).metadata.get();
-#else
-    return std::get<DictationAlternativesData>(m_data).metadata.get();
-#endif
 }
 
 inline void DocumentMarker::setMetadata(id metadata)
 {
-#if OS(AROS)
     WTF::get<DictationAlternativesData>(m_data).metadata = metadata;
-#else
-    std::get<DictationAlternativesData>(m_data).metadata = metadata;
-#endif
 }
 
 #endif

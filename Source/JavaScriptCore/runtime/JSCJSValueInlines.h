@@ -38,12 +38,7 @@
 #include "JSProxy.h"
 #include "JSStringInlines.h"
 #include "MathCommon.h"
-#if OS(AROS)
 #include <wtf/Variant.h>
-#else
-#warning "Source/JavaScriptCore/runtime/JSCJSValueInlines.h Variant"
-#include <variant>
-#endif // OS(AROS)
 #include <wtf/text/StringImpl.h>
 
 namespace JSC {
@@ -730,11 +725,7 @@ ALWAYS_INLINE double JSValue::toNumber(ExecState* exec) const
     return toNumberSlowCase(exec);
 }
 
-// #if OS(AROS)
 ALWAYS_INLINE Variant<JSBigInt*, double> JSValue::toNumeric(ExecState* exec) const
-// #else
-// ALWAYS_INLINE std::variant<JSBigInt*, double> JSValue::toNumeric(ExecState* exec) const
-// #endif
 {
     if (isInt32())
         return asInt32();
@@ -754,11 +745,7 @@ ALWAYS_INLINE Variant<JSBigInt*, double> JSValue::toNumeric(ExecState* exec) con
     return value;
 }
 
-// #if OS(AROS)
 ALWAYS_INLINE Variant<JSBigInt*, int32_t> JSValue::toBigIntOrInt32(ExecState* exec) const
-// #else
-// ALWAYS_INLINE std::variant<JSBigInt*, int32_t> JSValue::toBigIntOrInt32(ExecState* exec) const
-// #endif
 {
     if (isInt32())
         return asInt32();
