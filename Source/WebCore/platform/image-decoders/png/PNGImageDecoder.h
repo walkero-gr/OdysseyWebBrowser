@@ -27,7 +27,7 @@
 
 #include "ScalableImageDecoder.h"
 #if ENABLE(APNG)
-#include <png.h>
+#include <libpng16/png.h>
 #endif
 
 namespace WebCore {

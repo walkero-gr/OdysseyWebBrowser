@@ -77,7 +77,7 @@ OWBFile::~OWBFile()
 #endif
 }
 
-#if !OS(AROS)
+#if !OS(AROS) && !OS(AMIGAOS)
 int OWBFile::open(char openType)
 {
 	struct AsyncFile *fd = 0;
@@ -218,7 +218,8 @@ int OWBFile::open(char openType)
 {
     char name[PATH_MAX];
 
-    stccpy(name, m_filePath.latin1().data(), sizeof(name));
+    // stccpy(name, m_filePath.latin1().data(), sizeof(name));
+	sprintf(name, "%s", m_filePath.latin1().data());
 
     if (openType == 'w')
         m_fd = ::fopen(name, "w");
@@ -235,26 +236,26 @@ int OWBFile::open(char openType)
 void OWBFile::close()
 {
     if (m_fd)
-        ::fclose(m_fd);
+        ::fclose((FILE*)m_fd);
     m_fd = 0;
 }
 
 char* OWBFile::read(size_t size)
 {
     char* readData = new char[size + 1];
-    ::fread(readData, size, 1, m_fd);
+    ::fread(readData, size, 1, (FILE *)m_fd);
     readData[size] = '\0';
     return readData;
 }
 
 void OWBFile::write(String dataToWrite)
 {
-    ::fwrite(dataToWrite.utf8().data(), dataToWrite.length(), 1, m_fd);
+    ::fwrite(dataToWrite.utf8().data(), dataToWrite.length(), 1, (FILE *)m_fd);
 }
 
 void OWBFile::write(const void* data, size_t length)
 {
-    ::fwrite(data, length, 1, m_fd);
+    ::fwrite(data, length, 1, (FILE *)m_fd);
 }
 
 int OWBFile::getSize()
@@ -262,14 +263,14 @@ int OWBFile::getSize()
     int fileSize, current;
 
     //save the current offset
-    current = ftell(m_fd);
+    current = ftell((FILE *)m_fd);
 
     //save the size
-    fseek(m_fd, 0, SEEK_END);
-    fileSize = ftell(m_fd);
+    fseek((FILE *)m_fd, 0, SEEK_END);
+    fileSize = ftell((FILE *)m_fd);
 
     //go back to the previous offset
-    fseek(m_fd, current, SEEK_SET);
+    fseek((FILE *)m_fd, current, SEEK_SET);
 
     return fileSize;
 }

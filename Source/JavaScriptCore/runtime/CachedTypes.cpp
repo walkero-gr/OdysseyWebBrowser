@@ -44,6 +44,10 @@
 #include <wtf/UUID.h>
 #include <wtf/text/AtomicStringImpl.h>
 
+namespace std {
+    typedef struct { long long __ll; long double __ld; } max_align_t;
+}
+
 namespace JSC {
 
 template <typename T, typename = void>

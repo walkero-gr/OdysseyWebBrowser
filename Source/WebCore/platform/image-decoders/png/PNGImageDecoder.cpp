@@ -42,7 +42,7 @@
 #include "PNGImageDecoder.h"
 
 #include "Color.h"
-#include <png.h>
+#include <libpng16/png.h>
 #include <wtf/StdLibExtras.h>
 #include <wtf/UniqueArray.h>
 

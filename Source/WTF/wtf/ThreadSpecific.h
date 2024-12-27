@@ -122,6 +122,9 @@ private:
 
 #if USE(PTHREADS)
     pthread_key_t m_key { };
+#   if OS(AMIGAOS)
+#       define PTHREAD_KEYS_MAX 1024
+#   endif
 #elif OS(WINDOWS)
     int m_index;
 #endif
